@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './styles.module.css'
+import MovieFilter from "../MovieFilter/MovieFilter.jsx";
 const MovieInput = (props) => {
   return (
     <div className={styles.wrapper}>
@@ -17,6 +18,10 @@ const MovieInput = (props) => {
         <button className={styles.button} onClick={props.handleCancelEditing}>
         Cancel
       </button>}
+        <MovieFilter
+            filter={props.filter}
+        setFilter={props.setFilter}>
+        </MovieFilter>
     </div>
   );
 };

@@ -7,7 +7,7 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [movieName, setMovieName] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
-
+  const [filter, setFilter] = useState('notWatched');
   const handleAddOrEditMovie = () => {
     if (movieName.trim() === "") return;
     if (editingIndex !== null) {
@@ -15,11 +15,12 @@ export default function App() {
       updatedMovies[editingIndex].name = movieName;
       setMovies(updatedMovies);
       setEditingIndex(null);
-    } else {
-      setMovies([...movies, {name: movieName, watched: false}]);
-    }
-    setMovieName("");
-  };
+      } else {
+        const Index = movies.length
+        setMovies([...movies, {Indexx: Index,name: movieName, watched: false, liked: null}]);
+      }
+      setMovieName("");
+    };
 
   const handleDeleteMovie = (index) => {
     setMovies(movies.filter((_, i) => i !== index));
@@ -35,11 +36,22 @@ export default function App() {
     setMovieName("");
   }
 
-  const toggleWatched = (index) => {
-    const updatedMovies = [...movies]
-    updatedMovies[index].watched = !updatedMovies[index].watched;
-    setMovies(updatedMovies)
-  }
+    const toggleWatched = (index) => {
+      const updatedMovies = [...movies]
+      updatedMovies[index].watched = !updatedMovies[index].watched;
+      setMovies(updatedMovies)
+    }
+  const like = (index) => {
+    const updatedMovies = [...movies];
+    updatedMovies[index].liked = updatedMovies[index].liked === 'like' ? null : 'like';
+    setMovies(updatedMovies);
+  };
+
+  const dislike = (index) => {
+    const updatedMovies = [...movies];
+    updatedMovies[index].liked = updatedMovies[index].liked === 'dislike' ? null : 'dislike';
+    setMovies(updatedMovies);
+  };
 
   return (
     <div className="container">
@@ -50,12 +62,16 @@ export default function App() {
       handleAddOrEditMovie={handleAddOrEditMovie}
       editingIndex={editingIndex}
       handleCancelEditing={handleCancelEditing}
+      setFilter={setFilter}
+      filter={filter}
     />
       <MovieList
-        movies={movies}
+        movies={movies.filter(movie => (filter === 'notWatched' ? !movie.watched : movie.watched))}
         handleEditMovie={handleEditMovie}  
         handleDeleteMovie={handleDeleteMovie} 
-        toggleWatched={toggleWatched}/>
+        toggleWatched={toggleWatched}
+        like={like}
+        dislike={dislike}/>
     </div>
   );
 }
